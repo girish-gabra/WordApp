@@ -1,30 +1,17 @@
 from flask import Flask
 from flask_restful import Api, Resource
+from resources.allresources import Welcome
 from resources.allresources import RandomWord
-#from flask import request
+from resources.allresources import RhymeForWord
 
-
+# Create a flask instance
 app = Flask(__name__)
 
-api = Api(app)
+api = Api(app)	#Create Api for app instance
 
-class HelloWorld(Resource):
-	def get(self):
-		return {'hello':'world'}
-
-
-
-
-'''class RandomWord(Resource):
-	def get(self):
-		pass
-
-	def post(self):
-		words = request.form['words']
-		#wordList = words.split(",")
-		#return wordList[0]
-		return words'''
-
+# Add the resources to our Api instance
 api.add_resource(RandomWord,'/random')
-api.add_resource(HelloWorld, '/');
+api.add_resource(RhymeForWord,'/rhyme')
+api.add_resource(Welcome, '/')
+
 
