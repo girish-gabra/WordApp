@@ -2,4 +2,6 @@ Install Python3
 Install pip for Python3
 Install flask		(pip install flask)
 Install flask-restful (pip install flask-restful)
+Install pronouncing (pip install pronouncing)
+Install pyenchant (pip install pyenchant)
 
