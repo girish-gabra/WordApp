@@ -17,9 +17,14 @@ class RandomWord(Resource):
 
 	def post(self):
 		#words = request.form['words']
-		json_data = request.get_json(force=True)
+		try:
+			json_data = request.get_json(force=True)
+		except:
+			return {"error":"Input should have JSON data format"} 
 		wordList = json_data['words']		
 		wordList = wordList.split(",")  # split comma separated string into list of words
+		if len(wordList) <= 1:
+			return {"error":"Please enter atleast two words"}
 		numWords = len(wordList)		
 		randomIndex = randint(0,numWords-1)	# generates a random index so that random word can be returned
 		return {'random': wordList[randomIndex]}
@@ -28,7 +33,16 @@ class RandomWord(Resource):
 class RhymeForWord(Resource):
 	def get(self):
 		args=request.args
-		word = args['word']
+		if(len(args)>1):
+			return {"error":"Only one parameter 'word' allowed"}
+		if('word' not in args.keys()):
+			return {"error":"Parameter 'word' is missing"}
+		
+		word = args['word'].strip()	# remove trailing and leading spaces  
+ 
+		if len(word)==0:
+			return {"error":"Word cannot be empty"}		
+		
 		rhymeList = pronouncing.rhymes(word)	# Fetch list of rhyming words with the input word
 		rhymeList = ",".join(rhymeList)			# form a string of all rhyming words separated by ','
 		return {'rhymes':rhymeList}				# return json
@@ -37,8 +51,16 @@ class RhymeForWord(Resource):
 class SuggestWord(Resource):
 	def get(self):
 		args=request.args
+		if(len(args)>1):
+			return {"error":"Only one parameter 'word' allowed"}
+		if('word' not in args.keys()):
+			return {"error":"Parameter 'word' is missing"}
+		
 		d=enchant.Dict("en_US")
-		word = args['word']
+		word = args['word'].strip()
+		if len(word)==0:
+			return {"error":"Word cannot be empty"}	
+	
 		suggestList = list(d.suggest(word))[:10]
 		suggestList = ",".join(suggestList)
 		return {'suggestions': suggestList}
