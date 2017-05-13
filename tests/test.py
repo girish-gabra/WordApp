@@ -23,6 +23,19 @@ class AppTest(unittest.TestCase):
 		words = 'king,queen,jack,spade,ace'
 		response = self.random_helper(words)
 		self.assertEqual(response.status_code,200)
+				
+	#test for rhyme words api
+	def test_rhyming_words(self):
+		word = 'climbing'
+		data = {'word':word}
+		response = self.app.get('/rhyme',query_string=data)
+		self.assertEqual(response.status_code,200)
+
+	def test_suggest_words(self):
+		word = 'helo'
+		data = {'word':word}
+		response =self.app.get('/suggest',query_string=data)
+		self.assertEqual(response.status_code,200)
 
 if __name__ == "__main__":
 	unittest.main()
